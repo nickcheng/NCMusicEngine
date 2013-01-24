@@ -44,7 +44,7 @@ Tracking progress please use the following delegates:
 
 ## Future ##
 
-I'll keep polishing this engine and keep adding new features. If you have any problems when using this engine, please feel free to drop an issue or contact me:
+I'll keep polishing this engine and keep adding new features. If you have any problems when using this engine, please feel free to drop me an issue or contact me:
 
 * Twitter: http://twitter.com/nickcheng
 

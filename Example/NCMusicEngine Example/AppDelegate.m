@@ -20,7 +20,7 @@
   // Override point for customization after application launch.
   NCMusicEngine *player = [[NCMusicEngine alloc] init];
   player.delegate = self;
-  [player playUrl:[NSURL URLWithString:@"http://zhangmenshiting.baidu.com/data2/music/3575713/3477433176400128.mp3?xcode=1d3cd5053652ea9b7e85deeab998d759"]]; // Music link is temporarily searched from internet just for demo. Please replace it with your own's.
+  [player playUrl:[NSURL URLWithString:@"http://www.green-led.net/Jinhom/blog/music/The%20Rain.mp3"]]; // Music link is temporarily searched from internet just for demo. Please replace it with your own's.
   
   //
   self.window.backgroundColor = [UIColor whiteColor];
