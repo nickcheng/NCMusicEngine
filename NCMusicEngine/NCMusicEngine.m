@@ -115,28 +115,28 @@
 #endif
     
     // 
-    if (self.delegate &&
-        [self.delegate conformsToProtocol:@protocol(NCMusicEngineDelegate)] &&
-        [self.delegate respondsToSelector:@selector(engine:downloadProgress:)]) {
+    if (tempSelf.delegate &&
+        [tempSelf.delegate conformsToProtocol:@protocol(NCMusicEngineDelegate)] &&
+        [tempSelf.delegate respondsToSelector:@selector(engine:downloadProgress:)]) {
       CGFloat p = (CGFloat)totalBytesReadForFile / (CGFloat)totalBytesExpectedToReadForFile;
       if (p > 1) p = 1;
-      [self.delegate engine:tempSelf downloadProgress:p];
+      [tempSelf.delegate engine:tempSelf downloadProgress:p];
     }
 
     //
-    if (self.downloadState != NCMusicEngineDownloadStateDownloading)
-      self.downloadState = NCMusicEngineDownloadStateDownloading;
+    if (tempSelf.downloadState != NCMusicEngineDownloadStateDownloading)
+      tempSelf.downloadState = NCMusicEngineDownloadStateDownloading;
     
     //
-    if (self.playState == NCMusicEnginePlayStatePaused) {
-      NSTimeInterval playerCurrentTime = self.player.currentTime;
-      NSTimeInterval playerDuration = self.player.duration;
+    if (tempSelf.playState == NCMusicEnginePlayStatePaused) {
+      NSTimeInterval playerCurrentTime = tempSelf.player.currentTime;
+      NSTimeInterval playerDuration = tempSelf.player.duration;
       if (playerDuration - playerCurrentTime >= kNCMusicEnginePlayMargin && !tempSelf._pausedByUser)
         [tempSelf playLocalFile];
     }
     
     //
-    if (totalBytesReadForFile > kNCMusicEngineSizeBuffer && !self.player) {
+    if (totalBytesReadForFile > kNCMusicEngineSizeBuffer && !tempSelf.player) {
       [tempSelf playLocalFile];
     }
   }];
@@ -150,17 +150,17 @@
 #endif
 
     //
-    if (self.delegate &&
-        [self.delegate conformsToProtocol:@protocol(NCMusicEngineDelegate)] &&
-        [self.delegate respondsToSelector:@selector(engine:downloadProgress:)]) {
-      [self.delegate engine:tempSelf downloadProgress:1];
+    if (tempSelf.delegate &&
+        [tempSelf.delegate conformsToProtocol:@protocol(NCMusicEngineDelegate)] &&
+        [tempSelf.delegate respondsToSelector:@selector(engine:downloadProgress:)]) {
+      [tempSelf.delegate engine:tempSelf downloadProgress:1];
     }
 
     //
-    self.downloadState = NCMusicEngineDownloadStateDownloaded;
+    tempSelf.downloadState = NCMusicEngineDownloadStateDownloaded;
     
     //
-    if (self.playState != NCMusicEnginePlayStatePaused || !tempSelf._pausedByUser)
+    if (tempSelf.playState != NCMusicEnginePlayStatePaused || !tempSelf._pausedByUser)
     [tempSelf playLocalFile];
     
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -172,9 +172,9 @@
 #endif
     
     //
-    self.error = error;
-    self.downloadState = NCMusicEngineDownloadStateError;
-    self.playState = NCMusicEnginePlayStateError;
+    tempSelf.error = error;
+    tempSelf.downloadState = NCMusicEngineDownloadStateError;
+    tempSelf.playState = NCMusicEnginePlayStateError;
   }];
   
   [self.operation start];
