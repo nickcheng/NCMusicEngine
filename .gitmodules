@@ -1,6 +1,3 @@
-[submodule "AFDownloadRequestOperation"]
-	path = AFDownloadRequestOperation
-	url = https://github.com/nickcheng/AFDownloadRequestOperation.git
 [submodule "AFNetworking"]
 	path = AFNetworking
 	url = https://github.com/AFNetworking/AFNetworking.git
