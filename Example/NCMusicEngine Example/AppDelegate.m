@@ -12,15 +12,17 @@
 @interface AppDelegate () <NCMusicEngineDelegate>
 @end
 
-@implementation AppDelegate
+@implementation AppDelegate {
+  NCMusicEngine *_player;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   
   // Override point for customization after application launch.
-  NCMusicEngine *player = [[NCMusicEngine alloc] init];
-  player.delegate = self;
-  [player playUrl:[NSURL URLWithString:@"http://www.green-led.net/Jinhom/blog/music/The%20Rain.mp3"]]; // Music link is temporarily searched from internet just for demo. Please replace it with your own's.
+  _player = [[NCMusicEngine alloc] init];
+  _player.delegate = self;
+  [_player playUrl:[NSURL URLWithString:@"http://datashat.net/music_for_programming_18-konx_om_pax.mp3"]]; // Music link is temporarily searched from internet just for demo. Please replace it with your own's.
   
   //
   self.window.backgroundColor = [UIColor whiteColor];

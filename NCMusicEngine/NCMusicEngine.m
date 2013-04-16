@@ -103,8 +103,8 @@
     self.operation = nil;
   }
   self.operation = [[AFDownloadRequestOperation alloc] initWithRequest:request targetPath:_localFilePath shouldResume:YES useTemporaryFile:NO];
-  __weak NCMusicEngine *tempSelf = self;
-  [self.operation setProgressiveDownloadProgressBlock:^(NSInteger bytesRead, long long totalBytesRead, long long totalBytesExpected, long long totalBytesReadForFile, long long totalBytesExpectedToReadForFile) {
+  __typeof(&*self) __weak weakSelf = self;
+  [self.operation setProgressiveDownloadProgressBlock:^(AFDownloadRequestOperation *ro, NSInteger bytesRead, long long totalBytesRead, long long totalBytesExpected, long long totalBytesReadForFile, long long totalBytesExpectedToReadForFile) {
     //
 #ifdef DDLogInfo
     DDLogInfo(@"[NCMusicEngine] Download Progress: %u, %lld, %lld, %lld, %lld",
@@ -115,29 +115,29 @@
 #endif
     
     // 
-    if (tempSelf.delegate &&
-        [tempSelf.delegate conformsToProtocol:@protocol(NCMusicEngineDelegate)] &&
-        [tempSelf.delegate respondsToSelector:@selector(engine:downloadProgress:)]) {
+    if (weakSelf.delegate &&
+        [weakSelf.delegate conformsToProtocol:@protocol(NCMusicEngineDelegate)] &&
+        [weakSelf.delegate respondsToSelector:@selector(engine:downloadProgress:)]) {
       CGFloat p = (CGFloat)totalBytesReadForFile / (CGFloat)totalBytesExpectedToReadForFile;
       if (p > 1) p = 1;
-      [tempSelf.delegate engine:tempSelf downloadProgress:p];
+      [weakSelf.delegate engine:weakSelf downloadProgress:p];
     }
 
     //
-    if (tempSelf.downloadState != NCMusicEngineDownloadStateDownloading)
-      tempSelf.downloadState = NCMusicEngineDownloadStateDownloading;
+    if (weakSelf.downloadState != NCMusicEngineDownloadStateDownloading)
+      weakSelf.downloadState = NCMusicEngineDownloadStateDownloading;
     
     //
-    if (tempSelf.playState == NCMusicEnginePlayStatePaused) {
-      NSTimeInterval playerCurrentTime = tempSelf.player.currentTime;
-      NSTimeInterval playerDuration = tempSelf.player.duration;
-      if (playerDuration - playerCurrentTime >= kNCMusicEnginePlayMargin && !tempSelf._pausedByUser)
-        [tempSelf playLocalFile];
+    if (weakSelf.playState == NCMusicEnginePlayStatePaused) {
+      NSTimeInterval playerCurrentTime = weakSelf.player.currentTime;
+      NSTimeInterval playerDuration = weakSelf.player.duration;
+      if (playerDuration - playerCurrentTime >= kNCMusicEnginePlayMargin && !weakSelf._pausedByUser)
+        [weakSelf playLocalFile];
     }
     
     //
-    if (totalBytesReadForFile > kNCMusicEngineSizeBuffer && !tempSelf.player) {
-      [tempSelf playLocalFile];
+    if (totalBytesReadForFile > kNCMusicEngineSizeBuffer && !weakSelf.player) {
+      [weakSelf playLocalFile];
     }
   }];
 
@@ -150,18 +150,18 @@
 #endif
 
     //
-    if (tempSelf.delegate &&
-        [tempSelf.delegate conformsToProtocol:@protocol(NCMusicEngineDelegate)] &&
-        [tempSelf.delegate respondsToSelector:@selector(engine:downloadProgress:)]) {
-      [tempSelf.delegate engine:tempSelf downloadProgress:1];
+    if (weakSelf.delegate &&
+        [weakSelf.delegate conformsToProtocol:@protocol(NCMusicEngineDelegate)] &&
+        [weakSelf.delegate respondsToSelector:@selector(engine:downloadProgress:)]) {
+      [weakSelf.delegate engine:weakSelf downloadProgress:1];
     }
 
     //
-    tempSelf.downloadState = NCMusicEngineDownloadStateDownloaded;
+    weakSelf.downloadState = NCMusicEngineDownloadStateDownloaded;
     
     //
-    if (tempSelf.playState != NCMusicEnginePlayStatePaused || !tempSelf._pausedByUser)
-    [tempSelf playLocalFile];
+    if (weakSelf.playState != NCMusicEnginePlayStatePaused || !weakSelf._pausedByUser)
+    [weakSelf playLocalFile];
     
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     //
@@ -172,9 +172,9 @@
 #endif
     
     //
-    tempSelf.error = error;
-    tempSelf.downloadState = NCMusicEngineDownloadStateError;
-    tempSelf.playState = NCMusicEnginePlayStateError;
+    weakSelf.error = error;
+    weakSelf.downloadState = NCMusicEngineDownloadStateError;
+    weakSelf.playState = NCMusicEnginePlayStateError;
   }];
   
   [self.operation start];
