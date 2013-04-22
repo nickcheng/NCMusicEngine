@@ -161,7 +161,7 @@
     
     //
     if (weakSelf.playState != NCMusicEnginePlayStatePaused || !weakSelf._pausedByUser)
-    [weakSelf playLocalFile];
+      [weakSelf playLocalFile];
     
   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     //
@@ -172,9 +172,11 @@
 #endif
     
     //
-    weakSelf.error = error;
-    weakSelf.downloadState = NCMusicEngineDownloadStateError;
-    weakSelf.playState = NCMusicEnginePlayStateError;
+    if (error.code != -999) {
+      weakSelf.error = error;
+      weakSelf.downloadState = NCMusicEngineDownloadStateError;
+      weakSelf.playState = NCMusicEnginePlayStateError;
+    }
   }];
   
   [self.operation start];
