@@ -8,6 +8,7 @@ A simple and easy-to-use music engine support playing-while-downloading feature.
 * Cache downloaded music to disk. You can specify the cache key.
 * Tracking downloading and playing progress.
 * Background playing.
+* Handle interruption.(eg. A coming call)
 
 ## Dependence ##
 
