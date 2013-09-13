@@ -57,8 +57,8 @@
   
   //
   if (setBGPlay) {
-    [[AVAudioSession sharedInstance] setActive: YES error: nil];
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    [[AVAudioSession sharedInstance] setActive: YES error: nil];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
   }
 
@@ -346,6 +346,14 @@
       [self.delegate engine:self playProgress:1.f];
     }
   }
+}
+
+- (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player {
+  [self pause];
+}
+
+- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player withOptions:(NSUInteger)flags {
+  [self resume];
 }
 
 @end
