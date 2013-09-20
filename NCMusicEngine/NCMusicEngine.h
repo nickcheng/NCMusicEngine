@@ -38,10 +38,12 @@ typedef enum {
 
 @property (nonatomic, assign, readonly) NCMusicEnginePlayState playState;
 @property (nonatomic, assign, readonly) NCMusicEngineDownloadState downloadState;
+@property (nonatomic, assign, readonly) BOOL backgroundPlayingEnabled;
 @property (nonatomic, strong, readonly) NSError *error;
 @property (weak) id<NCMusicEngineDelegate> delegate;
 
 - (id)initWithSetBackgroundPlaying:(BOOL)setBGPlay;
+- (void)prepareBackgroundPlaying;
 - (void)playUrl:(NSURL*)url;
 - (void)playUrl:(NSURL *)url withCacheKey:(NSString *)cacheKey;
 - (void)pause;

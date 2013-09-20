@@ -14,6 +14,7 @@
 
 @property (nonatomic, assign, readwrite) NCMusicEnginePlayState playState;
 @property (nonatomic, assign, readwrite) NCMusicEngineDownloadState downloadState;
+@property (nonatomic, assign, readwrite) BOOL backgroundPlayingEnabled;
 @property (nonatomic, strong, readwrite) NSError *error;
 
 @property (nonatomic, strong) AFDownloadRequestOperation *operation;
@@ -27,6 +28,8 @@
 
 @implementation NCMusicEngine {
   //
+  BOOL _backgroundPlayingEnabled;
+  //
   NSString *_localFilePath;
   NSTimer *_playCheckingTimer;
 }
@@ -38,6 +41,7 @@
 @synthesize error = _error;
 @synthesize delegate;
 @synthesize _pausedByUser;
+@synthesize backgroundPlayingEnabled = _backgroundPlayingEnabled;
 
 #pragma mark -
 #pragma mark Init
@@ -54,12 +58,11 @@
   _playState = NCMusicEnginePlayStateStopped;
   _downloadState = NCMusicEngineDownloadStateNotDownloaded;
   _pausedByUser = NO;
-  
+  _backgroundPlayingEnabled = NO;
+
   //
   if (setBGPlay) {
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-    [[AVAudioSession sharedInstance] setActive: YES error: nil];
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [self prepareBackgroundPlaying];
   }
 
   //
@@ -74,6 +77,13 @@
 
 #pragma mark -
 #pragma mark Public Methods
+
+- (void)prepareBackgroundPlaying {
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+  [[AVAudioSession sharedInstance] setActive: YES error: nil];
+  [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+  _backgroundPlayingEnabled = YES;
+}
 
 - (void)playUrl:(NSURL*)url {
   NSString *cacheKey = [self cacheKeyFromUrl:url];
